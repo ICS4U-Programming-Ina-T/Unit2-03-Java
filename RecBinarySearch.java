@@ -1,3 +1,7 @@
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
 /**
  * The RecBinarySearch program implements an application that
  * generates 250 random numbers in an array and allows the
@@ -8,11 +12,30 @@
  * @since   2022-04-04
  */
 
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Arrays;
-
 class RecBinarySearch {
+    /**
+     * The min number for array.
+     */
+    private static final int MIN = 0;
+    /**
+     * The max number for array.
+     */
+    private static final int MAX = 999;
+    /**
+     * The number of elements in the array.
+     */
+    private static final int ARRAY_SIZE = 250;
+    /**
+     **
+     * The error message for exceptions.
+     */
+    private static final String ERROR_MESS = "ERROR: Value does not exist.";
+
+    /**
+     * Creating private constructor.
+     *
+     * @throws IllegalStateException when called.
+     */
     private RecBinarySearch() {
         // Prevent instantiation
         // Optional: throw an exception e.g. AssertionError
@@ -21,106 +44,114 @@ class RecBinarySearch {
     }
 
     /**
-     * The min number for array.
-     */
-    public static final int MIN = 0;
-    
-    /**
-     * The max number for array.
-     */
-    public static final int MAX = 999;
-    
-    /**
-     * The number of elements in the array.
-     */
-    public static final int ARRAY_SIZE = 250;
-    
-    /**
      * Function finds the index of a number, using Binary Search recursively.
      *
-     * @param userArray
-     * @param userNumber
-     * @param lowIndex
-     * @param highIndex
-     * @return binarySearch
+     * @param userArray accepted to function
+     * @param userNumber accepted to function
+     * @param lowIndex accepted to function
+     * @param highIndex accepted to function
+     * @return binarySearch copied to main function
      */
-    static int binarySearch(final int[] userArray, final int userNumber, final int lowIndex, final int highIndex) {
+    static int binarySearch(int[] userArray, int userNumber,
+        int lowIndex, int highIndex) {
+        // declaring variables
+         int mid = lowIndex + ((highIndex - lowIndex) / 2);
+        int returnValue;
+
         if (lowIndex > highIndex) {
-            return -1;
+            returnValue = -1;
         }
-
-        int mid = lowIndex + ((highIndex - lowIndex) / 2);
-
-        // System.out.println(mid);
-        // System.out.println(userArray[mid]);
 
         if (userArray[mid] == userNumber) {
-            return mid;
+            returnValue = mid;
         } else if (userNumber < userArray[mid]) {
-            return binarySearch(userArray, userNumber, lowIndex, mid - 1);
+            returnValue =
+                binarySearch(userArray, userNumber, lowIndex, mid - 1);
         } else {
-            return binarySearch(userArray, userNumber, mid + 1, highIndex);
+            returnValue =
+                binarySearch(userArray, userNumber, mid + 1, highIndex);
         }
-
-        // // solve this function!
-        // return -1;
+        return returnValue;
     }
 
-    
     /**
      * Main entry into the program.
-     * 
+     *
      * @param args nothing passed in
      */
-    public static void main(final String[] args) {
+    public static void main(String[] args) {
+        // declaring variables
+        final Scanner userInput = new Scanner(System.in);
+        final Random randNumber = new Random();
+        final int[] randomNumberArray = new int[ARRAY_SIZE];
+        final int[] numberArray;
+        final int searchNumber;
+        final int searchResult;
+        String userNumString;
+        String padded;
+
         System.out.println("Binary Search Program");
+
         try {
-            // Initializing the random class
-            Random randNumber = new Random();
-
-            // Initializing array of numbers
-            int[] randomNumberArray = new int[ARRAY_SIZE];
-
-            // Adding numbers to the array
-            for (int counter = 0; counter < randomNumberArray.length; counter++) {
+            // adding numbers to the array
+            for (int counter = 0; counter
+                < randomNumberArray.length; counter++) {
                 randomNumberArray[counter] = randNumber.nextInt(MAX) + 1;
             }
 
-            // Sorting the array
-            int[] numberArray = randomNumberArray;
+            // sorting the array
+            numberArray = randomNumberArray;
             Arrays.sort(numberArray);
 
             System.out.print("\nSorted list of numbers:\n");
             for (int element: numberArray) {
-                String padded = String.format("%03d", element);
+                padded = String.format("%03d", element);
                 System.out.print(padded + ", ");
             }
             System.out.print("\n\n");
 
-            // Getting user input as to what number they wish to search for
-            Scanner userInput = new Scanner(System.in);
+            // getting user input as to what number they wish to search for
             System.out.print("What number are you searching for in the array");
             System.out.print(" (integer between 0 and 999): ");
-            int searchNumber = userInput.nextInt();
+            userNumString = userInput.nextLine();
             userInput.close();
             System.out.println();
 
-            // Ensuring the user inputs an appropriate integer
-            if (searchNumber > MAX || searchNumber < MIN) {
-                throw new Exception();
-            } else {
-                // Using binary search to find the user's chosen number in the array
-                int searchResult = binarySearch(numberArray, searchNumber, 0, numberArray.length - 1);
+            try {
+                searchNumber = Integer.parseInt(userNumString);
 
-                // Outputing the results of the search
+                // ensuring the user inputs an appropriate integer
+                
+                for (int cursor: numberArray) {
+                    if (cursor != searchNumber) {
+                        throw new IllegalArgumentException();
+                    } else {
+                        break;
+                    }
+                }
+                
+                if (searchNumber > MAX || searchNumber < MIN) {
+                    throw new IllegalArgumentException();
+                } else {
+                    /* Using binary search to find the user's
+                    chosen number in the array */
+                    searchResult =
+                        binarySearch(numberArray,
+                            searchNumber, 0, numberArray.length - 1);
+
+                    // Outputing the results of the search
+                    System.out.println();
+                    System.out.println("Your number is in index: " + searchResult);
+                }
+            } catch (IllegalArgumentException exception) {
                 System.out.println();
-                System.out.println("Your number is in index: " + searchResult);
+                System.out.println(ERROR_MESS);
             }
 
             // Catches and tells the user that an error occured
-        } catch (Exception e) {
+        } catch (IllegalArgumentException exception) {
             System.out.println();
-            System.out.println("ERROR: Invalid Input");
+            System.out.println(ERROR_MESS);
         }
     }
 }
