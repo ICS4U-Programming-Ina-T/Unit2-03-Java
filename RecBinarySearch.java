@@ -25,11 +25,6 @@ class RecBinarySearch {
      * The number of elements in the array.
      */
     private static final int ARRAY_SIZE = 250;
-    /**
-     **
-     * The error message for exceptions.
-     */
-    private static final String ERROR_MESS = "ERROR: Value does not exist.";
 
     /**
      * Creating private constructor.
@@ -114,44 +109,37 @@ class RecBinarySearch {
             System.out.print("What number are you searching for in the array");
             System.out.print(" (integer between 0 and 999): ");
             userNumString = userInput.nextLine();
+            // searchNumber = userInput.nextInt();
             userInput.close();
             System.out.println();
-
-            try {
+            
+            int tempVar = Integer.parseInt(userNumString);
+            int numInt = Integer.parseInt(userNumString);
+            
+            if (numInt == tempVar) {
                 searchNumber = Integer.parseInt(userNumString);
-
-                // ensuring the user inputs an appropriate integer
-                
-                for (int cursor: numberArray) {
-                    if (cursor != searchNumber) {
-                        throw new IllegalArgumentException();
-                    } else {
-                        break;
-                    }
-                }
-                
-                if (searchNumber > MAX || searchNumber < MIN) {
-                    throw new IllegalArgumentException();
-                } else {
-                    /* Using binary search to find the user's
-                    chosen number in the array */
-                    searchResult =
-                        binarySearch(numberArray,
-                            searchNumber, 0, numberArray.length - 1);
-
-                    // Outputing the results of the search
-                    System.out.println();
-                    System.out.println("Your number is in index: " + searchResult);
-                }
-            } catch (IllegalArgumentException exception) {
-                System.out.println();
-                System.out.println(ERROR_MESS);
+            } else {
+                throw new IllegalArgumentException();
             }
 
+            // ensuring the user inputs an appropriate integer
+            if (searchNumber > MAX || searchNumber < MIN) {
+                throw new IllegalArgumentException();
+            } else {
+                /* Using binary search to find the user's
+                chosen number in the array */
+                searchResult =
+                    binarySearch(numberArray,
+                        searchNumber, 0, numberArray.length - 1);
+
+                // Outputing the results of the search
+                System.out.println();
+                System.out.println("Your number is in index: " + searchResult);
+            }
             // Catches and tells the user that an error occured
         } catch (IllegalArgumentException exception) {
             System.out.println();
-            System.out.println(ERROR_MESS);
+            System.out.println("ERROR: Invalid Input");
         }
     }
 }
