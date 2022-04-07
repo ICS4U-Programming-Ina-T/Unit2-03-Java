@@ -50,23 +50,20 @@ class RecBinarySearch {
     static int binarySearch(int[] userArray, int userNumber,
         int lowIndex, int highIndex) {
         // declaring variables
-         int mid = lowIndex + ((highIndex - lowIndex) / 2);
-        int returnValue;
+        final int mid = lowIndex + ((highIndex - lowIndex) / 2);
 
         if (lowIndex > highIndex) {
-            returnValue = -1;
+            return -1;
         }
 
+        // checks the index of where the user's number is
         if (userArray[mid] == userNumber) {
-            returnValue = mid;
+            return mid;
         } else if (userNumber < userArray[mid]) {
-            returnValue =
-                binarySearch(userArray, userNumber, lowIndex, mid - 1);
+            return binarySearch(userArray, userNumber, lowIndex, mid - 1);
         } else {
-            returnValue =
-                binarySearch(userArray, userNumber, mid + 1, highIndex);
+            return binarySearch(userArray, userNumber, mid + 1, highIndex);
         }
-        return returnValue;
     }
 
     /**
@@ -82,7 +79,7 @@ class RecBinarySearch {
         final int[] numberArray;
         final int searchNumber;
         final int searchResult;
-        String userNumString;
+        final String userNumString;
         String padded;
 
         System.out.println("Binary Search Program");
@@ -112,10 +109,10 @@ class RecBinarySearch {
             // searchNumber = userInput.nextInt();
             userInput.close();
             System.out.println();
-            
-            int tempVar = Integer.parseInt(userNumString);
-            int numInt = Integer.parseInt(userNumString);
-            
+
+            final int tempVar = Integer.parseInt(userNumString);
+            final int numInt = Integer.parseInt(userNumString);
+
             if (numInt == tempVar) {
                 searchNumber = Integer.parseInt(userNumString);
             } else {
@@ -132,13 +129,15 @@ class RecBinarySearch {
                     binarySearch(numberArray,
                         searchNumber, 0, numberArray.length - 1);
 
-                // Outputing the results of the search
-                System.out.println();
-                System.out.println("Your number is in index: " + searchResult);
+                // outputting the results of the search
+                if (searchResult == -1) {
+                    System.out.println("Value does not exist in the array.");
+                } else {
+                    System.out.println("Your number is in index: " + searchResult);
+                }
             }
-            // Catches and tells the user that an error occured
+            // catches and tells the user that an error occurred
         } catch (IllegalArgumentException exception) {
-            System.out.println();
             System.out.println("ERROR: Invalid Input");
         }
     }
